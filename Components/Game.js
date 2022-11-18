@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Dimensions, TouchableWithoutFeedback, View, Image, Text } from "react-native"
+import { Dimensions, TouchableWithoutFeedback, View, Image, Text, ToastAndroid } from "react-native"
 import King from "./King"
 import Obstacle from "./Obstacle"
 import stylesheet from "./stylesheet"
@@ -20,6 +20,8 @@ const Game = () => {
   const [obstacleBottomRand, setObstacleBottomRand] = useState(0)
   const [obstacleBottomRandSecond, setObstacleBottomRandSecond] = useState(0)
   const [isGameOver, setIsGameOver] = useState(true)
+  const [score, setScore] = useState(0)
+  const [newScore, setNewScore] = useState(0)
 
   useEffect(()=>{
     if(kingPosY>0) {
@@ -38,6 +40,7 @@ const Game = () => {
       return ()=> {clearInterval(obstacleTimer)}
     }
     else {
+      setNewScore(score=>score=score+1)
       setObstaclePos(current=>current=screenWidth)
       setObstacleBottomRand(-Math.random() *200)
     }
@@ -51,6 +54,7 @@ const Game = () => {
       return ()=> {clearInterval(obstacleTimerSecond)}
     }
     else {
+      setNewScore(score=>score=score+1)
       setObstaclePosSecond(current=>current=screenWidth)
       setObstacleBottomRandSecond(-Math.random() * 200)
     }
@@ -81,6 +85,9 @@ const Game = () => {
     clearInterval(obstacleTimer)
     clearInterval(obstacleTimerSecond)
     setIsGameOver(isGameOver=>isGameOver=true)
+    if(newScore > score) {
+      setScore(score=>score=newScore)
+    }
   }
 
   useEffect(()=> {
@@ -91,10 +98,14 @@ const Game = () => {
       setObstacleBottomRand(0)
       setObstacleBottomRandSecond(0)
     }
+    if(isGameOver==true && newScore>0) {
+      ToastAndroid.show(`Your Score: ${newScore}`, ToastAndroid.SHORT)
+    }
   }, [isGameOver])
 
   const startGame = () => {
     setIsGameOver(isGameOver=>isGameOver=false)
+    setNewScore(score=>score=0)
   }
 
   return(
@@ -106,6 +117,7 @@ const Game = () => {
               <View style={stylesheet.overlay}>
                 <Text style={[stylesheet.gameName, {bottom: screenHeight/10}]}>Flying King</Text>
                 <Image style={stylesheet.playButton} source={require('../assets/play.png')}/>
+                {isGameOver && <Text style={[stylesheet.score, {top: screenHeight/12}]}>High Score: {score}</Text>}
               </View>
             </TouchableWithoutFeedback> : 
             
