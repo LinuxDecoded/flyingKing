@@ -8,9 +8,8 @@ export default styleSheet = StyleSheet.create({
     },
     king: {
         position: 'absolute',
-        width: 50,
-        height: 50,
-        backgroundColor: 'green',
+        width: 55,
+        height: 55,
     },
     obstacle: {
         position: 'absolute',
@@ -38,5 +37,10 @@ export default styleSheet = StyleSheet.create({
         fontSize: 50,
         color: 'limegreen',
         fontWeight: "bold"
+      },
+      score: {
+        fontSize: 30,
+        color: 'limegreen',
+        fontWeight: 'bold'
       }
 })
