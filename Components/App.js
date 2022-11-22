@@ -35,9 +35,7 @@ const App = () => {
           if(value!=null){
             const intValue = parseInt(value)
             setScore(intValue)
-            console.log("got value: ",intValue)
           }
-          else{console.log("got null")}
         })
     } catch(err) {
       console.log(err)
@@ -52,7 +50,6 @@ const App = () => {
     try{
         const value = score.toString()
       await AsyncStorage.setItem('highScore', value)
-      console.log("saved value: ",value)
     } catch(err) {
       console.log(err)
     }
@@ -72,6 +69,9 @@ const App = () => {
       obstacleTimer = setInterval(()=> {
         setObstaclePos(curr=>{return curr-5})
       }, 30)
+      if((newScore == 0) && (firstObstaclePosX < screenWidth/2)) {
+        setNewScore(curr=>{return curr+1})
+      }
       return ()=> {clearInterval(obstacleTimer)}
     }
     else {
@@ -158,6 +158,9 @@ const App = () => {
             
             <TouchableWithoutFeedback onPress={jump}>
               <View style={stylesheet.container}>
+                <View style={[stylesheet.liveScoreContainer, {left: screenWidth/2-35}]}>
+                  <Text style={stylesheet.liveScore}>{newScore}</Text>
+                </View>
                 <King kingPosY={kingPosY}/>
                 <Obstacle obstaclePosX={firstObstaclePosX} obstacleHeight={obstacleHeight} randomBottom={obstacleBottomRand}/>
                 <Obstacle obstaclePosX={secondObstaclePosX} obstacleHeight={obstacleHeight} randomBottom={obstacleBottomRandSecond}/>
